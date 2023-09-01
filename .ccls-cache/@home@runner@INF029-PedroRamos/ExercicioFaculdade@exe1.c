@@ -1,28 +1,28 @@
 #include <stdio.h>
 
 int main(void) {
-  int num[3];
+  int num[8];
   int cont, flag;
   int flag2 = 0;
-  for(int g = 0; g < 3; g++){
-    scanf("%d", &num[g]);
+  num[0] = 7;
+  num[1] = 1;
+  num[2] = 3;
+  num[3] = 2;
+  num[4] = 5;
+  num[5] = 8;
+  num[6] = 4;
+  num[7] = 6;
+
+  for (int i = 0; i < 8; i++){
+    for (int j = 1; j < i + 1; j++){
+      if(num[j] > num[i]){
+        cont = num[j];
+        num[j] = num[i];
+        num[i] = cont;
+      }
+    }
   }
-  scanf("%d", &cont);
-  // for(int i = 0; i < 50; i++){
-  //   if(num[i] > num[i+1]){
-  //     flag = num[i];
-  //     num[i] = num[i+1];
-  //     num[i+1] = flag;      
-  //   }
-  // }
-  for(int j = 0; j < 3; j++){
-    if( cont == num[j]){
-      flag2 = 1;
-    }
-    if(flag){
-      printf("Achei");
-    }else{
-      printf("Não achei");
-    }
+  for (int i = 0; i < 8; i++){
+    printf("%d", num[i]);
   }
 }
