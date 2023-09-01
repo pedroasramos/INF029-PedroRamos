@@ -1,3 +1,6 @@
+#ifndef GERAL_H
+#define GERAL_H
+
 #include <stdio.h>
 #define TAM_CPF 11
 #define TAM_DATA_NASCIMENTO 8
@@ -19,3 +22,5 @@ int menuGeral();
 //   matriculasProfessores++;
 //   return matriculasProfessores;
 // }
+
+#endif

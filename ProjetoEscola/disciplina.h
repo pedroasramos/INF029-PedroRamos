@@ -1,3 +1,6 @@
+#ifndef DISCIPLINA_H
+#define DISCIPLINA_H
+
 #define TAM_DISCIPLINA 3
 #define TAM_NOME_DISCIPLINA 20
 #define CAD_DISCIPLINA_SUCESSO -10
@@ -18,3 +21,5 @@ int cadastrarDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas);
 void listarDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas);
 int atualizarDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas);
 int excluirDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas);
+
+#endif 

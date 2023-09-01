@@ -1,3 +1,5 @@
+#ifndef ALUNO_H
+#define ALUNO_H
 #include "geral.h"
 
 #define TAM_ALUNO 3
@@ -24,3 +26,5 @@ int cadastrarAluno(Aluno listaAlunos[], int qtdAlunos);
 void listarAlunos(Aluno listaAlunos[], int qtdAlunos);
 int atualizarAluno(Aluno listaAlunos[], int qtdAlunos);
 int excluirAluno(Aluno listaAlunos[], int qtdAlunos);
+
+#endif

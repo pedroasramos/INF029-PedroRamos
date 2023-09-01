@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "aluno.c"
-#include "professor.c"
-#include "disciplina.c"
-#include "geral.c"
+#include "aluno.h"
+#include "professor.h"
+#include "disciplina.h"
+#include "geral.h"
 
 int main(void) {
   Aluno listaAlunos[TAM_ALUNO];

@@ -1,3 +1,6 @@
+#ifndef PROFESSOR_H
+#define PROFESSOR_H
+
 #include "geral.h"
 #define TAM_PROFESSOR 3
 #define CAD_PROFESSOR_SUCESSO -7
@@ -21,3 +24,5 @@ int cadastrarProfessor(Professor listaProfessores[], int qtdProfessores);
 void listarProfessor(Professor listaProfessores[], int qtdProfessores);
 int atualizarProfessor(Professor listaProfessores[], int qtdProfessores);
 int excluirProfessor(Professor listaProfessores[], int qtdProfessores);
+
+#endif
