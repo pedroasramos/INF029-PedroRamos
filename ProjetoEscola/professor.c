@@ -25,13 +25,13 @@ int cadastrarProfessor(Professor listaProfessores[], int qtdProfessores) {
     char sexo;
     char dataNasc[TAM_DATA_NASCIMENTO];
     char cpf[TAM_CPF];
-    printf("Informe o nome do aluno\n");
+    printf("Informe o nome do professor\n");
     scanf("%s", nome);
-    printf("Informe o sexo do aluno\n");
+    printf("Informe o sexo do professor\n");
     scanf("%s", &sexo);
-    printf("Informe a data de nascimento do aluno\n");
+    printf("Informe a data de nascimento do professor\n");
     scanf("%s", dataNasc);
-    printf("Informe o cpf do aluno\n");
+    printf("Informe o cpf do professor\n");
     scanf("%s", cpf);
     if (strcmp(nome, " ")) {
       return MATRICULA_PROFESSOR_INVALIDA;
@@ -55,7 +55,7 @@ void listarProfessor(Professor listaProfessores[], int qtdProfessores) {
   } else {
     for (int i = 0; i < qtdProfessores; i++) {
       if (listaProfessores[i].ativo)
-        printf("Matrícula: %d\n", listaProfessores[i].matricula);
+        printf("Matrícula: %d Nome: %s\n", listaProfessores[i].matricula, listaProfessores[i].nome);
     }
   }
 }

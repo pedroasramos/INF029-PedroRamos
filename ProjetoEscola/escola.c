@@ -8,6 +8,7 @@
 int main(void) {
   Aluno listaAlunos[TAM_ALUNO];
   int qtdAlunos = 0;
+  int matriAlunos = 0;
 
   Professor listaProfessores[TAM_PROFESSOR];
   int qtdProfessores = 0;
@@ -38,20 +39,20 @@ int main(void) {
           break;
         }
         case 1: {
-          int retorno = cadastrarAluno(listaAlunos, qtdAlunos);
+          int retorno = cadastrarAluno(listaAlunos, &qtdAlunos, &matriAlunos);
           if (retorno == LISTA_ALUNO_CHEIA)
             printf("Lista de alunos cheia\n");
           else if (retorno == MATRICULA_ALUNO_INVALIDA)
             printf("Nome aluno Inválido\n");
-          else
+          else{
             printf("Cadastrado com sucesso!\n");
             qtdAlunos++;
-
+          }
           break;
         }
 
         case 2: {
-          listarAlunos(listaAlunos, qtdAlunos);
+          listarAlunos(listaAlunos, &qtdAlunos);
           break;
         }
 
@@ -258,4 +259,3 @@ int main(void) {
     }
   }
 }
-

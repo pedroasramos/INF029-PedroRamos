@@ -22,8 +22,8 @@ typedef struct alu {
 } Aluno;
 
 int menuAluno();
-int cadastrarAluno(Aluno listaAlunos[], int qtdAlunos);
-void listarAlunos(Aluno listaAlunos[], int qtdAlunos);
+int cadastrarAluno(Aluno listaAlunos[], int *qtdAlunos, int *matriAlunos);
+void listarAlunos(Aluno listaAlunos[], int *qtdAlunos);
 int atualizarAluno(Aluno listaAlunos[], int qtdAlunos);
 int excluirAluno(Aluno listaAlunos[], int qtdAlunos);
 
