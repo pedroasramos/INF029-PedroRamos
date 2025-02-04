@@ -32,13 +32,35 @@ void insere_node(Arvore *arvore, Node *node){
     Node *pai;
     while(buscador != NULL){
       pai = buscador;
-      if(buscador->val < node->val) buscador = buscador->esquerda;
+      if(buscador->val > node->val) buscador = buscador->esquerda;
       else buscador = buscador->direita;
     }
-    if(pai->val < node->val) pai->esquerda = node;
+    if(pai->val > node->val) pai->esquerda = node;
     else pai->direita = node;
     node->pai = pai;
   }
+}
+
+void imprime_arvore(Node *node){
+  if(node != NULL){
+    imprime_arvore(node->esquerda);
+    printf("(%d) = ", node->val);
+    imprime_arvore(node->direita);
+  }
+}
+
+int maior_valor(Arvore *arvore){
+  int maior;
+  Node *buscador = arvore->raiz;
+  while(buscador != NULL){
+    maior = buscador->val;
+    buscador = buscador->direita;
+  }
+  return maior;
+}
+
+int predecessor(Node *node){
+  
 }
 
 int main(){
@@ -61,20 +83,13 @@ int main(){
       ponteiro = cria_node(numero);
       insere_node(arvore, ponteiro);
 
-
-
       valor = strtok(NULL, " ");
     }
     
-    void imprime_arvore(Node *node){
-      if(node != NULL){
-        imprime_arvore(node->esquerda);
-        printf("%d - ", node->val);
-        imprime_arvore(node->direita);
-      }
-    }
+    imprime_arvore(arvore->raiz);
     
     
+    printf("\n");
     
   }
 
