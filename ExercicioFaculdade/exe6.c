@@ -4,17 +4,23 @@
 #define MAX_RANGE 100000
 
 typedef struct Node{
-  struct Node *direita, *esquerda, *pai;
-  int val;
+  struct Node *direita, *esquerda, *pai, *prox;
+  int val, altura, cont;
 }Node;
 
 typedef struct Arvore{
   Node *raiz;
+  int cont;
 }Arvore;
+
+typedef struct Lista{
+  Node *begin;
+}Lista;
 
 Node *cria_node(int val){
   Node *p = malloc(sizeof(Node));
-  p->direita = p->esquerda = p->pai = NULL;
+  p->direita = p->esquerda = p->pai = p->prox = NULL;
+  p->altura = p->cont = 0;
   p->val = val;
   return p;
 }
@@ -22,14 +28,43 @@ Node *cria_node(int val){
 Arvore *cria_arvore(){
   Arvore *arv = malloc(sizeof(Arvore));
   arv->raiz = NULL;
+  arv->cont = -1;
   return arv;
+}
+
+Lista *cria_lista(){
+  Lista *lista = malloc(sizeof(Lista));
+  lista->begin = NULL;
+  return lista;
+}
+
+void insere_lista(Lista *lista, Node *node){
+  if(lista->begin == NULL) lista->begin = node;
+  else{
+    Node *posicao = lista->begin;
+    while(posicao->prox != NULL){
+      posicao = posicao->prox;
+    }
+    posicao->prox = node;
+  }
+}
+
+void definir_altura(Node *node, int altura){
+  if(node == NULL) return;
+  node->altura = altura;
+  definir_altura(node->esquerda, altura +1);
+  definir_altura(node->direita, altura +1);
+}
+
+void altura_node(Node *raiz){
+  definir_altura(raiz, 0);
 }
 
 void insere_node(Arvore *arvore, Node *node){
   if(arvore->raiz == NULL) arvore->raiz = node;
   else{
     Node *buscador = arvore->raiz;
-    Node *pai;
+    Node *pai = NULL;
     while(buscador != NULL){
       pai = buscador;
       if(buscador->val > node->val) buscador = buscador->esquerda;
@@ -39,6 +74,8 @@ void insere_node(Arvore *arvore, Node *node){
     else pai->direita = node;
     node->pai = pai;
   }
+  arvore->cont++;
+  node->cont = arvore->cont;
 }
 
 void imprime_arvore(Node *node){
@@ -49,19 +86,47 @@ void imprime_arvore(Node *node){
   }
 }
 
-int maior_valor(Arvore *arvore){
-  int maior;
-  Node *buscador = arvore->raiz;
-  while(buscador != NULL){
-    maior = buscador->val;
-    buscador = buscador->direita;
+void imprime_lista(Lista *lista){
+  Node *posicao = lista->begin;
+  while(posicao != NULL){
+    printf("%d ", posicao->altura);
+    posicao = posicao->prox;
   }
-  return maior;
 }
 
-int predecessor(Node *node){
-  
+Node *maior_valor(Node *raiz){
+  Node *buscador = raiz;
+  while(buscador->direita != NULL){
+    buscador = buscador->direita;
+  }
+  return buscador;
 }
+
+Node *menor_valor(Node *raiz){
+  Node *buscador = raiz;
+  while(buscador->esquerda != NULL){
+    buscador = buscador->esquerda;
+  }
+  return buscador;
+}
+
+Node *predecessor(Node *node){
+  if(node == NULL) return NULL;
+  if(node->esquerda != NULL){
+    Node *pred = node->esquerda;
+    while(pred->direita != NULL){
+      pred = pred->direita;
+    }
+    return pred;
+  }
+  Node *pred = node->pai;
+  while(pred != NULL && node == pred->esquerda){
+    node = pred;
+    pred = pred->pai;
+  }
+  return pred;
+}
+
 
 int main(){
   FILE *fp_in = fopen("L2Q1.in", "r");
@@ -71,24 +136,37 @@ int main(){
     return EXIT_FAILURE;
   }
 
-  Arvore *arvore = cria_arvore();
+  
   char linhas[MAX_RANGE];
   int numero;
   Node *ponteiro;
 
   while(fgets(linhas, sizeof(linhas), fp_in)){
+    Arvore *arvore = cria_arvore();
+    Lista *lista = cria_lista();
     char *valor = strtok(linhas, " ");
     while(valor){
       numero = atoi(valor);
       ponteiro = cria_node(numero);
       insere_node(arvore, ponteiro);
+      insere_lista(lista, ponteiro);
 
       valor = strtok(NULL, " ");
     }
     
-    imprime_arvore(arvore->raiz);
+    altura_node(arvore->raiz);
+    Node *maior_node = maior_valor(arvore->raiz);
+    int maior = maior_node->val;
+    int altura = maior_node->altura;
+    Node *pred = predecessor(maior_node);
+    int prede = pred->val;
+    imprime_lista(lista);
+    printf("max %d alt %d pred %d", maior, altura, prede);
     
     
+    
+    free(arvore);
+    free(lista);
     printf("\n");
     
   }
