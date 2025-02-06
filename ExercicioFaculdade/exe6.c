@@ -86,10 +86,10 @@ void imprime_arvore(Node *node){
   }
 }
 
-void imprime_lista(Lista *lista){
+void imprime_lista(Lista *lista, FILE *fp_out){
   Node *posicao = lista->begin;
   while(posicao != NULL){
-    printf("%d ", posicao->altura);
+    fprintf(fp_out, "%d ", posicao->altura);
     posicao = posicao->prox;
   }
 }
@@ -127,7 +127,6 @@ Node *predecessor(Node *node){
   return pred;
 }
 
-
 int main(){
   FILE *fp_in = fopen("L2Q1.in", "r");
   FILE *fp_out = fopen("L2Q1.out", "w");
@@ -135,7 +134,6 @@ int main(){
     printf("Não foi possível ler os arquivos!");
     return EXIT_FAILURE;
   }
-
   
   char linhas[MAX_RANGE];
   int numero;
@@ -160,25 +158,14 @@ int main(){
     int altura = maior_node->altura;
     Node *pred = predecessor(maior_node);
     int prede = pred->val;
-    imprime_lista(lista);
-    printf("max %d alt %d pred %d", maior, altura, prede);
-    
-    
+    imprime_lista(lista, fp_out);
+    fprintf(fp_out,"max %d alt %d pred %d\n", maior, altura, prede);
     
     free(arvore);
     free(lista);
     printf("\n");
     
   }
-
-
-
-
-
-
-
-
-
 
   fclose(fp_in);
   fclose(fp_out);
