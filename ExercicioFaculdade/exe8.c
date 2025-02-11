@@ -102,58 +102,119 @@ int somador(Node *node){
 
 void imprime_lista(Lista *lista, FILE *fp_out){
   Node *posicao = lista->begin;
-  int somaEsquerda = 0, somaDireita = 0;
+  fprintf(fp_out, "%d (%d)", posicao->val, posicao->altura);
+  posicao = posicao->prox;
   while(posicao != NULL){
-    somaEsquerda = somador(posicao->esquerda);
-    somaDireita = somador(posicao->direita);
-    fprintf(fp_out, "%d (%d) ", posicao->val, somaDireita - somaEsquerda);
+    fprintf(fp_out, " %d (%d)", posicao->val, posicao->altura);
     posicao = posicao->prox;
   }
+}
+
+Node *menor_valor(Node *raiz){
+  Node *buscador = raiz;
+  while(buscador->esquerda != NULL){
+    buscador = buscador->esquerda;
+  }
+  return buscador;
+}
+
+Node *remover_node(Node **raiz, Node *node){
+  if(node->esquerda == NULL && node->direita == NULL){
+    if(node->pai){
+      if(node->pai->esquerda == node) node->pai->esquerda = NULL;
+      else node->pai->direita = NULL;
+    }
+    else{
+      if(*raiz == node) *raiz = NULL;
+    }
+    free(node);
+    return NULL;
+  }
+
+  if(node->direita == NULL || node->esquerda == NULL){
+    Node *filho = (node->esquerda != NULL) ? node->esquerda : node->direita;
+    if(node->pai){
+      if(node->pai->esquerda == node) node->pai->esquerda = filho;
+      else node->pai->direita = filho;
+    }
+    else *raiz = filho;
+    filho->pai = node->pai;
+    free(node);
+    return filho;
+  }
+
+  Node *sucessor = menor_valor(node->direita);
+  node->val = sucessor->val;
+  if(sucessor->pai->esquerda == sucessor) sucessor->pai->esquerda = sucessor->direita;
+  else sucessor->pai->direita = sucessor->direita;
+  if(sucessor->direita) sucessor->direita->pai = sucessor->pai;
+  free(sucessor);
+  return node;
 }
 
 void liberar_lista(Lista *lista) {
     Node *atual = lista->begin;
     while (atual != NULL) {
         Node *prox = atual->prox;
-        free(atual);
+        atual->prox = NULL;
         atual = prox;
     }
     free(lista);
 }
 
+void liberar_arvore(Node *node){
+    if(node == NULL) return;
+    liberar_arvore(node->esquerda);
+    liberar_arvore(node->direita);
+    node->direita = node->esquerda = node->pai = node->prox = NULL;
+    free(node);
+}
+
 int main(){
-  FILE *fp_in = fopen("L2Q2.in", "r");
-  FILE *fp_out = fopen("L2Q2.out", "w");
+  FILE *fp_in = fopen("L2Q3.in", "r");
+  FILE *fp_out = fopen("L2Q3.out", "w");
   if(!fp_in || !fp_out){
     printf("Não foi possível ler os arquivos!");
     return EXIT_FAILURE;
   }
 
   char linhas[MAX_RANGE];
-  int numeros;
+  int numeros = 0;
+  int contador = 0;
 
   while(fgets(linhas, sizeof(linhas), fp_in)){
     Arvore *arvore = cria_arvore();
-    Lista *lista = cria_lista();
+    Lista *lista =cria_lista();
     char *valor = strtok(linhas, " ");
-    while(valor){
-      numeros = atoi(valor);
-      if(!procura_node(arvore->raiz, numeros)){
+    while(valor != NULL){
+      if(strcmp(valor, "a") == 0){
+        valor = strtok(NULL, " ");
+        numeros = atoi(valor);
         insere_node(arvore, cria_node(numeros));
+      }
+      if(strcmp(valor, "r") == 0){
+        valor = strtok(NULL, " ");
+        if(valor){
+          numeros = atoi(valor);
+          Node *achei = procura_node(arvore->raiz, numeros);
+          if(achei) remover_node(&arvore->raiz, achei);
+          else insere_node(arvore, cria_node(numeros));
+        }
       }
       valor = strtok(NULL, " ");
     }
+    
+    altura_node(arvore->raiz);
     ordena_arvore(lista, arvore->raiz);
     imprime_lista(lista, fp_out);
+    fprintf(fp_out, "\n");
 
+    liberar_arvore(arvore->raiz);
     liberar_lista(lista);
     free(arvore);
-    fprintf(fp_out, "\n");
   }
 
   fclose(fp_in);
   fclose(fp_out);
   return 0;
 }
-
-
