@@ -103,11 +103,13 @@ int somador(Node *node){
 void imprime_lista(Lista *lista, FILE *fp_out){
   Node *posicao = lista->begin;
   int somaEsquerda = 0, somaDireita = 0;
+  if(!posicao) return;
   while(posicao != NULL){
     somaEsquerda = somador(posicao->esquerda);
     somaDireita = somador(posicao->direita);
-    fprintf(fp_out, "%d (%d) ", posicao->val, somaDireita - somaEsquerda);
+    fprintf(fp_out, "%d (%d)", posicao->val, somaDireita - somaEsquerda);
     posicao = posicao->prox;
+    if(posicao != NULL) fprintf(fp_out, " ");
   }
 }
 
@@ -121,6 +123,19 @@ void liberar_lista(Lista *lista) {
     free(lista);
 }
 
+int contador_linhas(char *arvivo_saida){
+  FILE *arquivo = fopen(arvivo_saida, "r");
+  if(!arquivo) return -1;
+  int linhas = 0;
+  char tamanho[MAX_RANGE];
+
+  while(fgets(tamanho, sizeof(tamanho), arquivo)){
+    linhas++;
+  }
+  free(arquivo);
+  return linhas;
+}
+
 int main(){
   FILE *fp_in = fopen("L2Q2.in", "r");
   FILE *fp_out = fopen("L2Q2.out", "w");
@@ -131,6 +146,8 @@ int main(){
 
   char linhas[MAX_RANGE];
   int numeros;
+  int contador = 1;
+  int total_linhas = contador_linhas("L2Q2.in");
 
   while(fgets(linhas, sizeof(linhas), fp_in)){
     Arvore *arvore = cria_arvore();
@@ -146,9 +163,11 @@ int main(){
     ordena_arvore(lista, arvore->raiz);
     imprime_lista(lista, fp_out);
 
+    if(contador < total_linhas) fprintf(fp_out, "\n");
+    contador++;
+
     liberar_lista(lista);
     free(arvore);
-    fprintf(fp_out, "\n");
   }
 
   fclose(fp_in);

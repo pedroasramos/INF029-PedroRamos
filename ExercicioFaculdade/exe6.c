@@ -127,6 +127,19 @@ Node *predecessor(Node *node){
   return pred;
 }
 
+int contador_linhas(char *arvivo_saida){
+  FILE *arquivo = fopen(arvivo_saida, "r");
+  if(!arquivo) return -1;
+  int linhas = 0;
+  char tamanho[MAX_RANGE];
+
+  while(fgets(tamanho, sizeof(tamanho), arquivo)){
+    linhas++;
+  }
+  free(arquivo);
+  return linhas;
+}
+
 int main(){
   FILE *fp_in = fopen("L2Q1.in", "r");
   FILE *fp_out = fopen("L2Q1.out", "w");
@@ -138,6 +151,8 @@ int main(){
   char linhas[MAX_RANGE];
   int numero;
   Node *ponteiro;
+  int contador = 1;
+  int total_linhas = contador_linhas("L2Q1.in");
 
   while(fgets(linhas, sizeof(linhas), fp_in)){
     Arvore *arvore = cria_arvore();
@@ -159,12 +174,12 @@ int main(){
     Node *pred = predecessor(maior_node);
     int prede = pred->val;
     imprime_lista(lista, fp_out);
-    fprintf(fp_out,"max %d alt %d pred %d\n", maior, altura, prede);
+    fprintf(fp_out,"max %d alt %d pred %d", maior, altura, prede);
+    if(contador < total_linhas) fprintf(fp_out, "\n");
+    contador++;
     
     free(arvore);
-    free(lista);
-    printf("\n");
-    
+    free(lista);    
   }
 
   fclose(fp_in);

@@ -102,6 +102,7 @@ int somador(Node *node){
 
 void imprime_lista(Lista *lista, FILE *fp_out){
   Node *posicao = lista->begin;
+  if(!posicao) return;
   fprintf(fp_out, "%d (%d)", posicao->val, posicao->altura);
   posicao = posicao->prox;
   while(posicao != NULL){
@@ -170,6 +171,19 @@ void liberar_arvore(Node *node){
     free(node);
 }
 
+int contador_linhas(char *arvivo_saida){
+  FILE *arquivo = fopen(arvivo_saida, "r");
+  if(!arquivo) return -1;
+  int linhas = 0;
+  char tamanho[MAX_RANGE];
+
+  while(fgets(tamanho, sizeof(tamanho), arquivo)){
+    linhas++;
+  }
+  free(arquivo);
+  return linhas;
+}
+
 int main(){
   FILE *fp_in = fopen("L2Q3.in", "r");
   FILE *fp_out = fopen("L2Q3.out", "w");
@@ -179,9 +193,9 @@ int main(){
   }
 
   char linhas[MAX_RANGE];
-  int numeros = 0;
-  int contador = 0;
-
+  int numeros;
+  int contador = 1;
+  int total_linhas = contador_linhas("L2Q3.in");
   while(fgets(linhas, sizeof(linhas), fp_in)){
     Arvore *arvore = cria_arvore();
     Lista *lista =cria_lista();
@@ -207,8 +221,9 @@ int main(){
     altura_node(arvore->raiz);
     ordena_arvore(lista, arvore->raiz);
     imprime_lista(lista, fp_out);
-    fprintf(fp_out, "\n");
-
+    if(contador < total_linhas) fprintf(fp_out, "\n");
+    contador++;
+    
     liberar_arvore(arvore->raiz);
     liberar_lista(lista);
     free(arvore);
