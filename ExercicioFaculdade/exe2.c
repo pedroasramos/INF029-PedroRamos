@@ -118,6 +118,19 @@ void identifica_tipo(char *arquivo, int *vetorInt, float *vetorFlo, char vetorSt
   (*contS)++;
 }
 
+int contador_linhas(char *arvivo_entrada){
+  FILE *arquivo = fopen(arvivo_entrada, "r");
+  if(!arquivo) return -1;
+  int linhas = 0;
+  char tamanho[MAX_RANGE];
+
+  while(fgets(tamanho, sizeof(tamanho), arquivo)){
+    linhas++;
+  }
+  free(arquivo);
+  return linhas;
+}
+
 int main(){
   FILE *fp_in = fopen("L0Q2.in", "r");
   FILE *fp_out = fopen("L0Q2.out", "w");
@@ -132,6 +145,8 @@ int main(){
   char delimitadores_internos[] = " ";
   char *contexto_externo = NULL;
   char *contexto_interno = NULL;
+  int contador = 1;
+  int total_linhas = contador_linhas("L0Q2.in");
 
   while(fgets(arquivo, sizeof(arquivo), fp_in) != NULL){
     int vetorInt[MAX_RANGE], contInt = 0;
@@ -139,6 +154,7 @@ int main(){
     int contFlo = 0, contPon = 0;
     char vetorStr[MAX_RANGE][MAX_STRING];
     int contStr = 0;
+    bool flag = false;
 
     char *valor_externo = strtok_r(arquivo, delimitadores_externos, &contexto_externo);
 
@@ -167,34 +183,28 @@ int main(){
       ordena_pontos(vetorPontos, contPon);
     } 
 
-    if(contStr > 0){
-      fprintf(fp_out, "str:");
-      for (int i = 0; i < contStr; i++) {
-        fprintf(fp_out, "%s%s", vetorStr[i], i < contStr - 1 ? " " : "");
-      }
+    fprintf(fp_out, "str:");
+    for (int i = 0; i < contStr; i++) {
+      fprintf(fp_out, "%s%s", vetorStr[i], i < contStr - 1 ? " " : "");
     }
-        
-    if(contInt > 0){
-      fprintf(fp_out, " int:");
-      for(int i = 0; i < contInt; i++){
-        fprintf(fp_out, "%d%s", vetorInt[i], i < contInt - 1 ? " " : "");
-      }
+  
+    fprintf(fp_out, " int:");
+    for(int i = 0; i < contInt; i++){
+      fprintf(fp_out, "%d%s", vetorInt[i], i < contInt - 1 ? " " : "");
     }
-        
-    if(contFlo > 0){
-      fprintf(fp_out, " float:");
-      for(int i = 0; i < contFlo; i++){
-        fprintf(fp_out, "%g%s", vetorFloat[i], i < contFlo - 1 ? " " : "");
-      }
+  
+    fprintf(fp_out, " float:");
+    for(int i = 0; i < contFlo; i++){
+      fprintf(fp_out, "%g%s", vetorFloat[i], i < contFlo - 1 ? " " : "");
     }
-        
-    if(contPon > 0){
-      fprintf(fp_out, " p:");
-      for(int i = 0; i < contPon; i++){
-        fprintf(fp_out, "(%g,%g)%s", vetorPontos[i][0], vetorPontos[i][1], i < contPon - 1 ? " " : "");
-      }
+
+    fprintf(fp_out, " p:");
+    for(int i = 0; i < contPon; i++){
+      fprintf(fp_out, "(%g,%g)%s", vetorPontos[i][0], vetorPontos[i][1], i < contPon - 1 ? " " : "");
     }
-    fprintf(fp_out, "\n");
+    
+    if(contador < total_linhas) fprintf(fp_out, "\n");
+    contador++;
   }
 
   fclose(fp_in);

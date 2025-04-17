@@ -171,8 +171,8 @@ void liberar_arvore(Node *node){
     free(node);
 }
 
-int contador_linhas(char *arvivo_saida){
-  FILE *arquivo = fopen(arvivo_saida, "r");
+int contador_linhas(char *arvivo_entrada){
+  FILE *arquivo = fopen(arvivo_entrada, "r");
   if(!arquivo) return -1;
   int linhas = 0;
   char tamanho[MAX_RANGE];

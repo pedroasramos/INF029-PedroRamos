@@ -49,6 +49,19 @@ void ordena_vetor(int *vetorX, int *vetorY, int size){
   }
 }
 
+int contador_linhas(char *arvivo_entrada){
+  FILE *arquivo = fopen(arvivo_entrada, "r");
+  if(!arquivo) return -1;
+  int linhas = 0;
+  char tamanho[MAX_RANGE];
+
+  while(fgets(tamanho, sizeof(tamanho), arquivo)){
+    linhas++;
+  }
+  free(arquivo);
+  return linhas;
+}
+
 
 int main(){
 
@@ -66,6 +79,8 @@ int main(){
   char *contexto_externo = NULL;
   char *contexto_interno = NULL;
   char *valor_externo;
+  int contador = 1;
+  int total_linhas = contador_linhas("L0Q1.in");
   int cont =0;
   int contX =0;
   int contY =0;
@@ -104,7 +119,7 @@ int main(){
       float distancia = distance(ladoX, ladoY, contX);
       float shortc = shortcut(ladoX, ladoY, contX);
       
-      fprintf(fp_out, "points ");
+      fprintf(fp_out, "points");
       for(int i =0; i<contX; i++){
         copiaX[i] = (int)ladoX[i];
         copiaY[i] = (int)ladoY[i];
@@ -112,12 +127,14 @@ int main(){
       ordena_vetor(copiaX, copiaY, contX);
       
       for(int i =0; i<contX; i++){
-        fprintf(fp_out,"(%d,%d) ", copiaX[i], copiaY[i]);
+        fprintf(fp_out," (%d,%d)", copiaX[i], copiaY[i]);
       }
-      fprintf(fp_out, "distance ");      
-      fprintf(fp_out, "%.2f ",distancia);
-      fprintf(fp_out, "shortcut ");      
-      fprintf(fp_out, "%.2f \n", shortc);
+      fprintf(fp_out, " distance");      
+      fprintf(fp_out, " %.2f",distancia);
+      fprintf(fp_out, " shortcut");      
+      fprintf(fp_out, " %.2f", shortc);
+      if(contador < total_linhas) fprintf(fp_out, "\n");
+      contador++;
       
       contX = 0;
       contY = 0;
